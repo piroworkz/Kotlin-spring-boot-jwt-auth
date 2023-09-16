@@ -1,4 +1,4 @@
-package com.davidluna.jwtauth
+package com.davidluna.jwtauth.app
 
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
