@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.davidluna.jwtauth.app.r
 
 sealed interface R {
@@ -6,10 +8,10 @@ sealed interface R {
         const val EMPTY_STRING = ""
         const val SCOPE_IO = "scopeIO"
         const val SCOPE_MAIN = "scopeMain"
-        const val CSRF: String = "_csrf"
-        const val AUTHORIZATION: String = "Authorization"
-        const val ALLOWED_METHODS: String = "POST"
-        const val ALLOW_ALL: String = "*"
+        const val CSRF = "_csrf"
+        const val AUTHORIZATION = "Authorization"
+        const val ALLOWED_METHODS = "POST"
+        const val ALLOW_ALL = "*"
         const val AUTH_PREFIX = "/auth/**"
         const val GREET_PREFIX = "/greet/**"
     }
