@@ -11,6 +11,5 @@ allprojects {
 }
 
 subprojects {
-    plugins.apply("war")
     plugins.apply("kotlin")
 }

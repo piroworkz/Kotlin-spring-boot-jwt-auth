@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    war
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.kotlin.spring)
@@ -26,7 +27,8 @@ dependencies {
     implementation(libs.bundles.springboot)
     implementation(libs.bundles.jjwt)
     runtimeOnly(libs.h2.database)
-    testImplementation(libs.bundles.springboot.test)
+    testImplementation(libs.sb.starter.test)
+    testImplementation(libs.bundles.testing)
 }
 
 tasks.withType<KotlinCompile> {

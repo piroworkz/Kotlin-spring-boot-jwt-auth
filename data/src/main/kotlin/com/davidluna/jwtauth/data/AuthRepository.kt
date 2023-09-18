@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class AuthRepository(
-    private val local: AuthDataSource,
+    private val auth: AuthDataSource,
     private val hash: HashDataSource
 ) {
 
@@ -25,15 +25,15 @@ class AuthRepository(
     suspend fun registerUser(request: AuthRequest): Either<AppError, Boolean> = either {
         if (userExists(request).bind()) raise(AppError.AccountExists(400))
         val saltedHash = hash.createSaltedHash(request.password)
-        local.saveUser(request, saltedHash).bind()
+        auth.saveUser(request, saltedHash).bind()
     }
 
     suspend fun findUser(authRequest: AuthRequest): Either<AppError, User> = either {
-        local.findUser(authRequest).bind() ?: raise(AppError.UserNotFound(400))
+        auth.findUser(authRequest).bind() ?: raise(AppError.UserNotFound(400))
     }
 
     private suspend fun userExists(authRequest: AuthRequest): Either<AppError, Boolean> =
-        local.userExists(authRequest)
+        auth.userExists(authRequest)
 
     private suspend fun Raise<AppError>.validateLogin(request: AuthRequest) {
         if (!userExists(request).bind()) raise(AppError.UserNotFound(400))
