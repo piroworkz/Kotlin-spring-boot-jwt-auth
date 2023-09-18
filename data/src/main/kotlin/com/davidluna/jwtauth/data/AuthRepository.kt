@@ -1,9 +1,8 @@
 package com.davidluna.jwtauth.data
 
 import arrow.core.Either
-import arrow.core.Eval.Companion.raise
-import arrow.core.computations.EitherEffect
-import arrow.core.computations.either
+import arrow.core.raise.Raise
+import arrow.core.raise.either
 import com.davidluna.jwtauth.data.sources.AuthDataSource
 import com.davidluna.jwtauth.data.sources.HashDataSource
 import com.davidluna.jwtauth.domain.AppError
@@ -30,15 +29,13 @@ class AuthRepository(
     }
 
     suspend fun findUser(authRequest: AuthRequest): Either<AppError, User> = either {
-        val user: User? = local.findUser(authRequest).bind()
-        if (user == null) raise(AppError.UserNotFound(400))
-        user!!
+        local.findUser(authRequest).bind() ?: raise(AppError.UserNotFound(400))
     }
 
     private suspend fun userExists(authRequest: AuthRequest): Either<AppError, Boolean> =
         local.userExists(authRequest)
 
-    private suspend fun EitherEffect<AppError, *>.validateLogin(request: AuthRequest) {
+    private suspend fun Raise<AppError>.validateLogin(request: AuthRequest) {
         if (!userExists(request).bind()) raise(AppError.UserNotFound(400))
         val isPasswordValid = hash.validateHash(request.password, createSaltedHash(request.password))
         if (!isPasswordValid) raise(AppError.UnAuthorized(400))
@@ -46,6 +43,5 @@ class AuthRepository(
 
     private fun createSaltedHash(requestPass: String): SaltedHash =
         hash.createSaltedHash(requestPass)
-
 
 }

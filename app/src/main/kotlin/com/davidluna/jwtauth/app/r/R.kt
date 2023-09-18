@@ -5,6 +5,9 @@ package com.davidluna.jwtauth.app.r
 sealed interface R {
 
     object Strings {
+        const val CHARSET_UTF_8 = "UTF-8"
+        const val APPLICATION_JSON = "application/json"
+        const val BEARER = "Bearer "
         const val EMPTY_STRING = ""
         const val SCOPE_IO = "scopeIO"
         const val SCOPE_MAIN = "scopeMain"
@@ -17,7 +20,7 @@ sealed interface R {
     }
 
     object ProtectedPaths {
-        const val GREET_PREFIX = "/greet"
+        const val GREET_PREFIX = "/protected"
         const val HELLO = "/hello"
     }
 

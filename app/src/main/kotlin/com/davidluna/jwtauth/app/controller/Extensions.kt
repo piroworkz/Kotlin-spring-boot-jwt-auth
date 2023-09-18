@@ -38,7 +38,12 @@ fun AppError.buildFailResponse(token: String = ""): Response<String> = Response(
 suspend fun <T> tryCatchSuspended(action: suspend () -> T): Either<AppError, T> = try {
     action().right()
 } catch (e: Exception) {
-    println("<-- ${e.message} ${e.printStackTrace()}")
+    e.toAppError().left()
+}
+
+fun <T> tryCatch(action: () -> T): Either<AppError, T> = try {
+    action().right()
+} catch (e: Exception) {
     e.toAppError().left()
 }
 

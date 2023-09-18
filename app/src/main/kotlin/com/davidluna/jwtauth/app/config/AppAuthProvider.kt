@@ -40,10 +40,10 @@ class AppAuthProvider(
     private fun tryLogin(request: AuthRequest?) {
         scopeIO.launch {
             request?.let {
-                findUserUseCase(it).findOrNull { u ->
-                    if (!passwordEncoder.matches(request.password, u.password))
+                findUserUseCase(it).getOrNull()?.takeIf { user ->
+                    if (!passwordEncoder.matches(request.password, user.password))
                         throw AppError.UnAuthorized(400)
-                    passwordEncoder.matches(request.password, u.password)
+                    passwordEncoder.matches(request.password, user.password)
                 }
             }
         }

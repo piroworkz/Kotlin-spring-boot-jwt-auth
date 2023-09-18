@@ -7,9 +7,6 @@ plugins {
     alias(libs.plugins.kotlin.jpa)
 }
 
-group = libs.versions.group
-version = libs.versions.version
-
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

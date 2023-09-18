@@ -16,6 +16,6 @@ class AppModule {
     val scopeMain get() = CoroutineScope(Dispatchers.Main)
 
     @get:Bean(R.JWTConfig.JWT_SECRET)
-    val jwtSecret get() = System.getenv(R.JWTConfig.JWT_SECRET)
+    val jwtSecret: String get() = System.getenv(R.JWTConfig.JWT_SECRET)
 
 }

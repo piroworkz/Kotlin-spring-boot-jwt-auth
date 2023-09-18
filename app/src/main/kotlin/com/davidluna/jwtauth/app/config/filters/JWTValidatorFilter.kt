@@ -1,10 +1,14 @@
 package com.davidluna.jwtauth.app.config.filters
 
-import com.davidluna.jwtauth.app.controller.toAppError
+import com.davidluna.jwtauth.app.controller.buildFailResponse
 import com.davidluna.jwtauth.app.r.R
+import com.davidluna.jwtauth.domain.AppError
+import com.davidluna.jwtauth.domain.JwtError
+import com.davidluna.jwtauth.domain.Response
 import com.davidluna.jwtauth.usecases.auth.GetJWTKeyUseCase
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.jsonwebtoken.*
+import io.jsonwebtoken.security.SignatureException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder
@@ -32,43 +36,51 @@ class JWTValidatorFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        validate(request)
-        filterChain.doFilter(request, response)
+        try {
+            val token = request.getHeader(R.Strings.AUTHORIZATION).replace(R.Strings.BEARER, R.Strings.EMPTY_STRING)
+            val claims: Claims = getClaims(token)
+
+            SecurityContextHolder.getContext().authentication =
+                UsernamePasswordAuthenticationToken(
+                    claims[R.JWTConfig.CLAIM_USERNAME],
+                    token,
+                    AuthorityUtils
+                        .commaSeparatedStringToAuthorityList(claims[R.JWTConfig.CLAIM_AUTHORITIES].toString())
+                )
+            filterChain.doFilter(request, response)
+        } catch (e: Exception) {
+            response.apply {
+                contentType = R.Strings.APPLICATION_JSON
+                characterEncoding = R.Strings.CHARSET_UTF_8
+                writer.write(e.toJwtError().buildFailResponse().toJson())
+            }
+        }
     }
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         return request.servletPath in shouldNotValidate
     }
 
-    private fun validate(request: HttpServletRequest) {
-        try {
-            println("<-- ${request.getHeader(R.Strings.AUTHORIZATION).trim()}")
-            val claims = getClaims(request.getHeader(R.Strings.AUTHORIZATION).trim())
-
-            SecurityContextHolder.getContext().authentication =
-                UsernamePasswordAuthenticationToken(
-                    claims[R.JWTConfig.CLAIM_USERNAME],
-                    null,
-                    AuthorityUtils.commaSeparatedStringToAuthorityList(
-                        claims[R.JWTConfig.CLAIM_AUTHORITIES].toString()
-                    )
-                )
-        } catch (e: Exception) {
-            throw e.toAppError()
-        }
-    }
-
-    private fun getClaims(currentToken: String): Claims {
-        val actualToken = if (currentToken.startsWith("Bearer ")) {
-            currentToken.substring("Bearer ".length)
-        } else {
-            currentToken
-        }.trim()
-        return Jwts.parserBuilder()
+    private fun getClaims(currentToken: String): Claims =
+        Jwts.parserBuilder()
             .setSigningKey(getJWTKeyUseCase())
             .build()
-            .parseClaimsJws(actualToken)
+            .parseClaimsJws(currentToken)
             .body
-    }
 
+    private fun <T> Response<T>.toJson(): String =
+        ObjectMapper().writeValueAsString(this)
+
+    fun Throwable.toJwtError(): AppError {
+        return when (this) {
+            is UnsupportedJwtException -> JwtError.MalformedJwt(500)
+            is MalformedJwtException -> JwtError.MalformedJwt(500)
+            is SignatureException -> JwtError.MalformedJwt(500)
+            is IllegalArgumentException -> JwtError.MalformedJwt(500)
+            is ExpiredJwtException -> JwtError.ExpiredJwt(500)
+            is Exception -> AppError.UnknownError(500)
+            else -> AppError.UnknownError(500)
+        }
+    }
 }
+
