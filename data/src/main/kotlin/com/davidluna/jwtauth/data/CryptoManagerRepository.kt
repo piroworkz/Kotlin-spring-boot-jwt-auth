@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component
 class CryptoManagerRepository(
     private val crypto: Crypto
 ) {
-    suspend fun encrypt(value: String): Either<AppError, String> =
+    fun encrypt(value: String): Either<AppError, String> =
         crypto.encrypt(value)
 
-    suspend fun decrypt(encrypted: String?): Either<AppError, String> =
+    fun decrypt(encrypted: String?): Either<AppError, String> =
         crypto.decrypt(encrypted)
 
 }

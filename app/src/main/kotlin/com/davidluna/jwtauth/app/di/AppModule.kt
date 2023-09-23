@@ -24,5 +24,4 @@ class AppModule {
     @get:Bean(R.EnvVariable.INIT_VECTOR)
     val initVector: String get() = System.getenv(R.EnvVariable.INIT_VECTOR)
 
-
 }

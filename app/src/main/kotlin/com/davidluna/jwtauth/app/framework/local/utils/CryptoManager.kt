@@ -1,13 +1,12 @@
 package com.davidluna.jwtauth.app.framework.local.utils
 
 import arrow.core.Either
-import com.davidluna.jwtauth.app.controller.tryCatchSuspended
+import com.davidluna.jwtauth.app.controller.tryCatch
 import com.davidluna.jwtauth.app.r.R
 import com.davidluna.jwtauth.app.r.R.EnvVariable.ALGORITHM
 import com.davidluna.jwtauth.app.r.R.EnvVariable.TRANSFORMATION
 import com.davidluna.jwtauth.data.sources.Crypto
 import com.davidluna.jwtauth.domain.AppError
-import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import java.util.Base64.getDecoder
@@ -37,11 +36,11 @@ class CryptoManager(
         init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
     }
 
-    override suspend fun encrypt(value: String): Either<AppError, String> = tryCatchSuspended {
+    override fun encrypt(value: String): Either<AppError, String> = tryCatch {
         String(getEncoder().encode(encryptCipher.doFinal(value.toByteArray())))
     }
 
-    override suspend fun decrypt(encrypted: String?): Either<AppError, String> = tryCatchSuspended {
+    override fun decrypt(encrypted: String?): Either<AppError, String> = tryCatch {
         String(decryptCypherForIv.doFinal(getDecoder().decode(encrypted)))
     }
 

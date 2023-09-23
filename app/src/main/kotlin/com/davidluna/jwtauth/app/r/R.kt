@@ -31,6 +31,7 @@ sealed interface R {
         const val LOGOUT = "/logout"
         const val SALUTE = "/salute"
         const val GET_USER = "/getUser"
+        const val HOME = "/"
     }
 
     object JWTConfig {

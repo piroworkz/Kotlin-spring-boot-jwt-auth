@@ -13,9 +13,11 @@ class CsrfCookieFilter: OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val csrfToken: CsrfToken = request.getAttribute(CsrfToken::class.java.getName()) as CsrfToken
-        if (csrfToken.headerName != null) {
-            response.setHeader(csrfToken.headerName, csrfToken.token)
+        val csrfToken: CsrfToken? = request.getAttribute(CsrfToken::class.java.name) as CsrfToken?
+        csrfToken?.let {
+            if (it.headerName != null) {
+                response.setHeader(it.headerName, it.token)
+            }
         }
         filterChain.doFilter(request, response)
     }

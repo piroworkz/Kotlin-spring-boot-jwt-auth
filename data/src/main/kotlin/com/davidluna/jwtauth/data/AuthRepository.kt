@@ -23,6 +23,7 @@ class AuthRepository(
     }
 
     suspend fun registerUser(request: AuthRequest): Either<AppError, Boolean> = either {
+        println("<-- registerUser repository")
         if (userExists(request).bind()) raise(AppError.AccountExists(400))
         val saltedHash = hash.createSaltedHash(request.password)
         auth.saveUser(request, saltedHash).bind()

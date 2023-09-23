@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class DecryptUseCase(val repository: CryptoManagerRepository) {
-    suspend inline operator fun <reified T> invoke(s: String): T? = either {
+    inline operator fun <reified T> invoke(s: String): T? = either {
         Gson().fromJson(repository.decrypt(s).bind(), T::class.java)
     }.fold(
         ifLeft = { null },

@@ -1,14 +1,10 @@
 package com.davidluna.jwtauth.app.config.filters
 
-import com.davidluna.jwtauth.app.controller.buildFailResponse
+import com.davidluna.jwtauth.app.controller.toJwtError
 import com.davidluna.jwtauth.app.r.R
-import com.davidluna.jwtauth.domain.AppError
-import com.davidluna.jwtauth.domain.JwtError
-import com.davidluna.jwtauth.domain.Response
 import com.davidluna.jwtauth.usecases.auth.GetJWTKeyUseCase
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.jsonwebtoken.*
-import io.jsonwebtoken.security.SignatureException
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jwts
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder
@@ -29,7 +25,7 @@ class JWTValidatorFilter(
         R.Paths.LOGOUT,
         R.Paths.SALUTE,
         R.Paths.GET_USER
-    ).map { R.Paths.AUTH_PREFIX + it }
+    ).map { R.Paths.AUTH_PREFIX + it }.plus(R.Paths.HOME)
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -49,11 +45,7 @@ class JWTValidatorFilter(
                 )
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
-            response.apply {
-                contentType = R.Strings.APPLICATION_JSON
-                characterEncoding = R.Strings.CHARSET_UTF_8
-                writer.write(e.toJwtError().buildFailResponse().toJson())
-            }
+            throw e.toJwtError()
         }
     }
 
@@ -68,19 +60,5 @@ class JWTValidatorFilter(
             .parseClaimsJws(currentToken)
             .body
 
-    private fun Response.toJson(): String =
-        ObjectMapper().writeValueAsString(this)
 
-    fun Throwable.toJwtError(): AppError {
-        return when (this) {
-            is UnsupportedJwtException -> JwtError.MalformedJwt(500)
-            is MalformedJwtException -> JwtError.MalformedJwt(500)
-            is SignatureException -> JwtError.MalformedJwt(500)
-            is IllegalArgumentException -> JwtError.MalformedJwt(500)
-            is ExpiredJwtException -> JwtError.ExpiredJwt(500)
-            is Exception -> AppError.UnknownError(500)
-            else -> AppError.UnknownError(500)
-        }
-    }
 }
-
