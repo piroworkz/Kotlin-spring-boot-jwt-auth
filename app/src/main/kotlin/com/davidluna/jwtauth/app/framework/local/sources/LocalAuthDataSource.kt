@@ -3,8 +3,8 @@ package com.davidluna.jwtauth.app.framework.local.sources
 import arrow.core.Either
 import com.davidluna.jwtauth.app.controller.tryCatchSuspended
 import com.davidluna.jwtauth.app.framework.local.database.daos.UserDao
-import com.davidluna.jwtauth.app.framework.local.toDomain
-import com.davidluna.jwtauth.app.framework.local.toRemote
+import com.davidluna.jwtauth.app.framework.local.utils.toDomain
+import com.davidluna.jwtauth.app.framework.local.utils.toRemote
 import com.davidluna.jwtauth.data.sources.AuthDataSource
 import com.davidluna.jwtauth.domain.AppError
 import com.davidluna.jwtauth.domain.AuthRequest

@@ -41,4 +41,13 @@ sealed interface R {
         const val JWT_SECRET = "JWT_SECRET"
         const val SUBJECT = "Json_Web_Token"
     }
+
+    object EnvVariable {
+        private const val BLOCK_MODE = "CBC"
+        private const val PADDING = "PKCS5PADDING"
+        const val ALGORITHM = "AES"
+        const val CRYPTO_KEY = "CRYPTO_KEY"
+        const val INIT_VECTOR = "INIT_VECTOR"
+        const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
+    }
 }

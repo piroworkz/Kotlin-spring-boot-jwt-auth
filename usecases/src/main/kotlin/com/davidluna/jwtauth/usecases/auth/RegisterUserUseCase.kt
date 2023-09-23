@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class RegisterUserUseCase(private val repository: AuthRepository) {
-    suspend operator fun invoke(authRequest: AuthRequest): Either<AppError, Boolean> =
-        repository.registerUser(authRequest)
+    suspend operator fun invoke(authRequest: AuthRequest): Either<AppError, Boolean> {
+        println("<-- $authRequest")
+        return repository.registerUser(authRequest)
+    }
 }

@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.davidluna.jwtauth.app.r.R
 import com.davidluna.jwtauth.domain.*
+import com.davidluna.jwtauth.usecases.crypto.CryptoUseCases
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -21,14 +22,18 @@ fun User.getClaims(): Array<JWTClaim> {
     )
 }
 
-fun <T> T.buildSuccessResponse(token: String = ""): Response<T> = Response(
+fun throwCryptoException(): Response = AppError.CryptoError(400).buildFailResponse()
+
+suspend inline fun <reified T> CryptoUseCases.getRequest(request: Request): T? = decrypt<T>(request.body)
+
+fun String.buildSuccessResponse(token: String = ""): Response = Response(
     code = StatusCode(value = 200, description = "Success"),
     message = "Success",
     token = token,
     body = this
 )
 
-fun AppError.buildFailResponse(token: String = ""): Response<String> = Response(
+fun AppError.buildFailResponse(token: String = ""): Response = Response(
     code = StatusCode(value = code, description = description),
     message = description,
     token = token,

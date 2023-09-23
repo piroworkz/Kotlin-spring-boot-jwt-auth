@@ -1,10 +1,10 @@
-package com.davidluna.jwtauth.app.framework.local
+package com.davidluna.jwtauth.app.framework.local.utils
 
+import com.davidluna.jwtauth.app.framework.local.database.entities.DBUser
 import com.davidluna.jwtauth.domain.AuthRequest
 import com.davidluna.jwtauth.domain.Role
 import com.davidluna.jwtauth.domain.SaltedHash
 import com.davidluna.jwtauth.domain.User
-import com.davidluna.jwtauth.app.framework.local.database.entities.DBUser
 import java.sql.ResultSet
 import kotlin.reflect.full.memberProperties
 

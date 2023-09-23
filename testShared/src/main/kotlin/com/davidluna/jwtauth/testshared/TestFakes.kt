@@ -17,7 +17,7 @@ val fakeSaltedHash = SaltedHash(
     hash = "dolore"
 )
 
-fun <T> T.getFakeResponse(): Response<T> = Response(
+fun String.getFakeResponse(): Response = Response(
     code = fakeStatus,
     message = "falli",
     token = "utroque",

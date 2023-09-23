@@ -21,14 +21,29 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":usecases"))
     implementation(project(":data"))
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.3")
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.sb.starter.web)
+    implementation(libs.sb.starter.data.jdbc)
+    implementation(libs.kotlin.reflect)
+
+    implementation(libs.gson)
+
     implementation(libs.bundles.arrow)
     implementation(libs.commons.codec)
     implementation(libs.bundles.coroutines)
-    implementation(libs.bundles.springboot)
     implementation(libs.bundles.jjwt)
     runtimeOnly(libs.h2.database)
+
+
     testImplementation(libs.sb.starter.test)
     testImplementation(libs.bundles.testing)
+}
+
+configurations.all {
+    exclude(group = "org.apache.tomcat.embed", module = "tomcat-embed-websocket")
+    exclude(group = "org.apache.tomcat.embed", module = "tomcat-embed-el")
 }
 
 tasks.withType<KotlinCompile> {

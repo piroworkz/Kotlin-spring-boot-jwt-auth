@@ -29,4 +29,9 @@ sealed class AppError(
         val statusCode: Int,
         val errorMessage: String = "Please check your password and try again."
     ) : AppError(statusCode, errorMessage)
+
+    data class CryptoError(
+        val statusCode: Int,
+        val errorMessage: String = "Invalid encryption method"
+    ) : AppError(statusCode, errorMessage)
 }

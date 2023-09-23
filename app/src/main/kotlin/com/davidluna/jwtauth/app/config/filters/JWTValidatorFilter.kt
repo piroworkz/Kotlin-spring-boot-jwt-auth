@@ -68,7 +68,7 @@ class JWTValidatorFilter(
             .parseClaimsJws(currentToken)
             .body
 
-    private fun <T> Response<T>.toJson(): String =
+    private fun Response.toJson(): String =
         ObjectMapper().writeValueAsString(this)
 
     fun Throwable.toJwtError(): AppError {

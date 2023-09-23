@@ -18,4 +18,11 @@ class AppModule {
     @get:Bean(R.JWTConfig.JWT_SECRET)
     val jwtSecret: String get() = System.getenv(R.JWTConfig.JWT_SECRET)
 
+    @get:Bean(R.EnvVariable.CRYPTO_KEY)
+    val cryptoKey: String get() = System.getenv(R.EnvVariable.CRYPTO_KEY)
+
+    @get:Bean(R.EnvVariable.INIT_VECTOR)
+    val initVector: String get() = System.getenv(R.EnvVariable.INIT_VECTOR)
+
+
 }
