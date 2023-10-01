@@ -14,4 +14,9 @@ sealed class JwtError(
         val statusCode: Int,
         val errorMessage: String = "Access Denied. Invalid Jwt."
     ) : JwtError(statusCode, errorMessage)
+
+    data class JwtNotFound(
+        val statusCode: Int,
+        val errorMessage: String = "Access Denied. Jwt not found."
+    ) : JwtError(statusCode, errorMessage)
 }

@@ -24,4 +24,13 @@ class AppModule {
     @get:Bean(R.EnvVariable.INIT_VECTOR)
     val initVector: String get() = System.getenv(R.EnvVariable.INIT_VECTOR)
 
+    @get:Bean(R.EnvVariable.DB_USER)
+    val dbUser: String get() = System.getenv(R.EnvVariable.DB_USER)
+
+    @get:Bean(R.EnvVariable.DB_PASSWORD)
+    val dbPassword: String get() = System.getenv(R.EnvVariable.DB_PASSWORD)
+
+    @get:Bean(R.EnvVariable.DB_URL)
+    val dbUrl: String get() = System.getenv(R.EnvVariable.DB_URL)
+
 }

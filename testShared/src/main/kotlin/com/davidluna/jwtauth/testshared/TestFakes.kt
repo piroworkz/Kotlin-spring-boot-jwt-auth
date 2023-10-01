@@ -4,11 +4,10 @@ import com.davidluna.jwtauth.domain.*
 
 val fakeAuthRequest = AuthRequest("david", "1234")
 val fakeUser = User(
-    id = "luptatum",
     username = "Emerson Shelton",
     password = "ne",
     salt = "nulla",
-    role = Role.ADMIN
+    role = Role.ADMIN.value
 )
 val fakeStatus = StatusCode(value = 7092, description = "diam")
 

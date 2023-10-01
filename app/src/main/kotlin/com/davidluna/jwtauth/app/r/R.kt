@@ -20,7 +20,7 @@ sealed interface R {
     }
 
     object ProtectedPaths {
-        const val GREET_PREFIX = "/protected"
+        const val PROTECTED_PREFIX = "/protected"
         const val HELLO = "/hello"
     }
 
@@ -50,5 +50,10 @@ sealed interface R {
         const val CRYPTO_KEY = "CRYPTO_KEY"
         const val INIT_VECTOR = "INIT_VECTOR"
         const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
+        const val DB_USER = "DB_USER"
+        const val DB_PASSWORD = "DB_PASSWORD"
+        const val DB_URL = "DB_URL"
+        const val DB_DRIVER = "com.mysql.cj.jdbc.Driver"
     }
+
 }

@@ -9,6 +9,8 @@ commons-codec = "1.16.0"
 spring-context = "5.3.30"
 jjwt-api = "0.11.5"
 gson = "2.10.1"
+my-sql-connector = "8.1.0"
+exposed_version = "0.41.1"
 
 #testing
 kotlin-coroutines = "1.7.3"
@@ -21,11 +23,17 @@ truth = "1.1.5"
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 spring-context = { group = "org.springframework", name = "spring-context", version.ref = "spring-context" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
-sb-starter-data-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-data-jdbc" }
 sb-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-tomcat = { group = "org.springframework.boot", name = "spring-boot-starter-tomcat" }
+mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "my-sql-connector" }
+
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed_version" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed_version" }
+exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed_version" }
+exposed-crypt = { group = "org.jetbrains.exposed", name = "exposed-crypt", version.ref = "exposed_version" }
+exposed-spring-boot-starter = { group = "org.jetbrains.exposed", name = "exposed-spring-boot-starter", version.ref = "exposed_version" }
 
 jackson-module-kt = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
-h2-database = { group = "com.h2database", name = "h2" }
 
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt-api" }
 jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt-api" }
@@ -47,6 +55,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 sb-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 
 [bundles]
+exposed = ["exposed-core", "exposed-jdbc", "exposed-dao", "exposed-crypt", "exposed-spring-boot-starter"]
 arrow = ["arrow-core"]
 coroutines = ["kotlinx-coroutines-core"]
 jjwt = ["jjwt-api", "jjwt-impl", "jjwt-jackson"]

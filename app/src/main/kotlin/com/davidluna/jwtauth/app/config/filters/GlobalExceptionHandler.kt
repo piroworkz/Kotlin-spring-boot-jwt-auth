@@ -12,9 +12,9 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(AppError::class)
     fun handleJwtException(ex: AppError, response: HttpServletResponse) {
-        println("<-- handleJwtException: ${ex.description}")
         response.contentType = "application/json"
         response.characterEncoding = "UTF-8"
         response.writer.write(ex.buildFailResponse().toJson())
     }
+
 }

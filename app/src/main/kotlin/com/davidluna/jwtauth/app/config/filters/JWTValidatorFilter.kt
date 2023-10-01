@@ -1,7 +1,10 @@
 package com.davidluna.jwtauth.app.config.filters
 
+import com.davidluna.jwtauth.app.controller.buildFailResponse
+import com.davidluna.jwtauth.app.controller.toJson
 import com.davidluna.jwtauth.app.controller.toJwtError
 import com.davidluna.jwtauth.app.r.R
+import com.davidluna.jwtauth.domain.AppError
 import com.davidluna.jwtauth.usecases.auth.GetJWTKeyUseCase
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -45,8 +48,14 @@ class JWTValidatorFilter(
                 )
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
-            throw e.toJwtError()
+            sendResponse(response, e)
         }
+    }
+
+    private fun sendResponse(response: HttpServletResponse, e: Exception) {
+        response.contentType = "application/json"
+        response.characterEncoding = "UTF-8"
+        response.writer.write(e.toJwtError().buildFailResponse().toJson())
     }
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {

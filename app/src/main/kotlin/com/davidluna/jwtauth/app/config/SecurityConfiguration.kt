@@ -47,7 +47,6 @@ class SecurityConfiguration(
 
 
     private fun configRequests(it: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
-
         it.antMatchers(AUTH_PREFIX, GREET_PREFIX, HELLO).permitAll()
         it.anyRequest().authenticated()
     }

@@ -26,7 +26,7 @@ class AppAuthProvider(
         getRequest(authentication).apply {
             tryLogin(this)
             return UsernamePasswordAuthenticationToken(
-                username, password, listOf(SimpleGrantedAuthority(role.value))
+                username, password, listOf(SimpleGrantedAuthority(role))
             )
         }
     }

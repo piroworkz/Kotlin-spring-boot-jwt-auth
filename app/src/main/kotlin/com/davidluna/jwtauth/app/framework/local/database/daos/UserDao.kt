@@ -1,14 +1,13 @@
 package com.davidluna.jwtauth.app.framework.local.database.daos
 
-import com.davidluna.jwtauth.app.framework.local.database.entities.DBUser
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
-import java.util.*
+import arrow.core.Either
+import com.davidluna.jwtauth.domain.AppError
+import com.davidluna.jwtauth.domain.User
 
-@Repository
-interface UserDao : CrudRepository<DBUser, UUID> {
-    fun findByUsername(username: String): DBUser?
-    fun save(user: DBUser): DBUser
-    fun existsDBUserByUsername(username: String): Boolean
+interface UserDao {
+    suspend fun findByUsername(username: String): Either<AppError, User?>
+    suspend fun save(user: User): Either<AppError, Boolean>
+    suspend fun userExists(username: String): Either<AppError, Boolean>
+    suspend fun updateUser(user: User): Either<AppError, Boolean>
 }
 

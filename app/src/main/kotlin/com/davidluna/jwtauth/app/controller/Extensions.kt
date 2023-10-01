@@ -5,9 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.davidluna.jwtauth.app.r.R
 import com.davidluna.jwtauth.domain.*
-import com.davidluna.jwtauth.usecases.crypto.CryptoUseCases
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.gson.Gson
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
@@ -23,14 +21,12 @@ fun User.getClaims(): Array<JWTClaim> {
         ),
         JWTClaim(
             R.JWTConfig.CLAIM_AUTHORITIES,
-            role.name
+            role
         )
     )
 }
 
 fun throwCryptoException(): Response = AppError.CryptoError(400).buildFailResponse()
-
-inline fun <reified T> CryptoUseCases.getRequest(request: Request): T? = decrypt<T>(request.body)
 
 fun String.buildSuccessResponse(token: String = ""): Response = Response(
     code = StatusCode(value = 200, description = "Success"),
@@ -49,8 +45,6 @@ fun AppError.buildFailResponse(token: String = ""): Response = Response(
 suspend fun <T> tryCatchSuspended(action: suspend () -> T): Either<AppError, T> = try {
     action().right()
 } catch (e: Exception) {
-    e.printStackTrace()
-    println("<-- tryCatchSuspended error: ${e.stackTrace}")
     e.toAppError().left()
 }
 
@@ -77,6 +71,7 @@ fun Throwable.toJwtError(): AppError {
         is SignatureException -> JwtError.MalformedJwt(500)
         is IllegalArgumentException -> JwtError.MalformedJwt(500)
         is ExpiredJwtException -> JwtError.ExpiredJwt(500)
+        is NullPointerException -> JwtError.JwtNotFound(500)
         is Exception -> AppError.UnknownError(500)
         else -> AppError.UnknownError(500)
     }
