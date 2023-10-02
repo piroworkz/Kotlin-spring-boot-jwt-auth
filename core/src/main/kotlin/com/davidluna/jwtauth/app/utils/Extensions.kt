@@ -1,10 +1,11 @@
-package com.davidluna.jwtauth.app.controller
+package com.davidluna.jwtauth.app.utils
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.davidluna.jwtauth.app.r.R
 import com.davidluna.jwtauth.domain.*
+import com.davidluna.jwtauth.usecases.crypto.CryptoUseCases
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
@@ -13,18 +14,18 @@ import io.jsonwebtoken.security.SignatureException
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-fun User.getClaims(): Array<JWTClaim> {
-    return arrayOf(
-        JWTClaim(
-            R.JWTConfig.CLAIM_USERNAME,
-            username
-        ),
-        JWTClaim(
-            R.JWTConfig.CLAIM_AUTHORITIES,
-            role
-        )
+fun User.getClaims(): Array<JWTClaim> = arrayOf(
+    JWTClaim(
+        R.JWTConfig.CLAIM_USERNAME,
+        username
+    ),
+    JWTClaim(
+        R.JWTConfig.CLAIM_AUTHORITIES,
+        role
     )
-}
+)
+
+inline fun <reified T> CryptoUseCases.getRequest(request: Request): T? = decrypt<T>(request.body)
 
 fun throwCryptoException(): Response = AppError.CryptoError(400).buildFailResponse()
 

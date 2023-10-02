@@ -1,5 +1,6 @@
-package com.davidluna.jwtauth.app.controller
+package com.davidluna.jwtauth.auth_controller
 
+import com.davidluna.jwtauth.app.utils.buildSuccessResponse
 import com.davidluna.jwtauth.app.r.R.ProtectedPaths.HELLO
 import com.davidluna.jwtauth.app.r.R.ProtectedPaths.PROTECTED_PREFIX
 import com.davidluna.jwtauth.app.r.R.Strings.AUTHORIZATION
@@ -17,7 +18,7 @@ class ProtectedRouter {
 
     @GetMapping(HELLO)
     suspend fun hello(request: HttpServletRequest): Response =
-        "This is a protected path".buildSuccessResponse(getTokenFromHeader(request))
+        "Hello world! This is a protected path".buildSuccessResponse(getTokenFromHeader(request))
 
     private fun getTokenFromHeader(request: HttpServletRequest): String =
         request.getHeader(AUTHORIZATION).replace(BEARER, EMPTY_STRING)

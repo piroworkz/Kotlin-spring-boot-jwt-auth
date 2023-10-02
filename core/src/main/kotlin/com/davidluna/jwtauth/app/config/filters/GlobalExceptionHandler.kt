@@ -1,7 +1,7 @@
 package com.davidluna.jwtauth.app.config.filters
 
-import com.davidluna.jwtauth.app.controller.buildFailResponse
-import com.davidluna.jwtauth.app.controller.toJson
+import com.davidluna.jwtauth.app.utils.buildFailResponse
+import com.davidluna.jwtauth.app.utils.toJson
 import com.davidluna.jwtauth.domain.AppError
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

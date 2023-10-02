@@ -1,3 +1,3 @@
 rootProject.name = "jwt-auth"
-include(":app", ":domain",":usecases",":data")
+include(":app",":core", ":domain",":usecases",":data", ":auth_controller")
 include("testShared")

@@ -17,13 +17,23 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":usecases"))
     implementation(project(":data"))
-    implementation(project(":core"))
-    implementation(project(":auth_controller"))
 
     implementation(libs.sb.starter.web)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.security)
     providedRuntime(libs.spring.boot.starter.tomcat)
+    implementation(libs.gson)
 
     implementation(libs.bundles.exposed)
+    implementation(libs.bundles.arrow)
+    implementation(libs.bundles.coroutines)
+
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.3")
+    implementation(libs.kotlin.reflect)
+    implementation(libs.mysql.connector)
+
+    implementation(libs.commons.codec)
+    implementation(libs.bundles.jjwt)
 
     testImplementation(libs.sb.starter.test)
     testImplementation(libs.bundles.testing)

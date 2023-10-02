@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     war
     alias(libs.plugins.spring.boot)
@@ -18,24 +16,11 @@ dependencies {
     implementation(project(":usecases"))
     implementation(project(":data"))
     implementation(project(":core"))
-    implementation(project(":auth_controller"))
 
     implementation(libs.sb.starter.web)
-    providedRuntime(libs.spring.boot.starter.tomcat)
+    implementation(libs.gson)
 
     implementation(libs.bundles.exposed)
-
-    testImplementation(libs.sb.starter.test)
-    testImplementation(libs.bundles.testing)
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "1.8"
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
+    implementation(libs.bundles.arrow)
+    implementation(libs.bundles.coroutines)
 }

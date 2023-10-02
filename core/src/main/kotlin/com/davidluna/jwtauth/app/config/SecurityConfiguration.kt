@@ -8,7 +8,6 @@ import com.davidluna.jwtauth.app.r.R.Strings.ALLOW_ALL
 import com.davidluna.jwtauth.app.r.R.Strings.AUTHORIZATION
 import com.davidluna.jwtauth.app.r.R.Strings.AUTH_PREFIX
 import com.davidluna.jwtauth.app.r.R.Strings.GREET_PREFIX
-import com.davidluna.jwtauth.usecases.auth.GetJWTKeyUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -25,17 +24,19 @@ import org.springframework.security.web.csrf.CsrfFilter.DEFAULT_CSRF_MATCHER
 import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
-class SecurityConfiguration(
-    private val getJWTKeyUseCase: GetJWTKeyUseCase
-) {
+class SecurityConfiguration {
 
     @Bean
-    fun customSecurityFilterChain(http: HttpSecurity): SecurityFilterChain = http
+    fun customSecurityFilterChain(
+        http: HttpSecurity,
+        csrfCookieFilter: CsrfCookieFilter,
+        jwtValidatorFilter: JWTValidatorFilter,
+    ): SecurityFilterChain = http
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .cors(::configCors)
         .csrf(::configCsrf)
-        .addFilterAfter(CsrfCookieFilter(), BasicAuthenticationFilter::class.java)
-        .addFilterBefore(JWTValidatorFilter(getJWTKeyUseCase), BasicAuthenticationFilter::class.java)
+        .addFilterAfter(csrfCookieFilter, BasicAuthenticationFilter::class.java)
+        .addFilterBefore(jwtValidatorFilter, BasicAuthenticationFilter::class.java)
         .authorizeHttpRequests(::configRequests)
         .formLogin { }
         .httpBasic { }
@@ -46,7 +47,9 @@ class SecurityConfiguration(
         BCryptPasswordEncoder()
 
 
-    private fun configRequests(it: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
+    private fun configRequests(
+        it: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry
+    ) {
         it.antMatchers(AUTH_PREFIX, GREET_PREFIX, HELLO).permitAll()
         it.anyRequest().authenticated()
     }

@@ -1,13 +1,14 @@
 package com.davidluna.jwtauth.app.config.filters
 
 import org.springframework.security.web.csrf.CsrfToken
+import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
-class CsrfCookieFilter: OncePerRequestFilter() {
+@Component
+class CsrfCookieFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

@@ -4,6 +4,7 @@ import com.davidluna.jwtauth.app.r.R
 import com.davidluna.jwtauth.app.r.R.EnvVariable.ALGORITHM
 import com.davidluna.jwtauth.app.r.R.EnvVariable.TRANSFORMATION
 import com.google.gson.Gson
+import org.springframework.stereotype.Component
 import java.util.Base64.getDecoder
 import java.util.Base64.getEncoder
 import javax.crypto.Cipher
@@ -11,6 +12,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.text.Charsets.UTF_8
 
+@Component
 object Crypto {
 
     private val key: String
@@ -37,8 +39,5 @@ object Crypto {
 
     fun decrypt(encrypted: String?): String =
         String(decryptCypherForIv.doFinal(getDecoder().decode(encrypted)))
-
-    fun <T> encrypt(t: T): String =
-        encrypt(Gson().toJson(t))
 
 }
